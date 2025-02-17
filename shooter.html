@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laboriosam, repudiandae debitis nemo, obcaecati temporibus dignissimos soluta at quaerat totam nam enim. Molestias illo earum nisi maiores, provident ipsam optio ullam magnam adipisci reiciendis doloremque praesentium laudantium fugiat et dolorem! Asperiores, magni ratione, fugit harum, repellat tempore tempora exercitationem iste eius aut obcaecati magnam? Beatae sunt est iusto? Adipisci consequatur doloribus ipsam nobis possimus voluptatibus est tempora accusantium nemo dolor dolorum perferendis cumque, dolorem optio! Nihil quos laudantium, id accusamus, repellendus debitis sed veritatis nostrum quas magnam doloremque earum officia sit maxime dolorum qui, quia tempore. Facere ut cumque fugiat est.</p>
+    <canvas id="gameCanvas">
+
+    </canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let score = 0;
+        let bullets = [];
+        let enemies = [];
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height - 150,
+            radius: 30,
+            color: 'blue'
+        }
+        // canvas.setAttribute('tabindex','0');
+        // canvas.focus();
+
+
+
+
+        window.addEventListener('keydown', (event) => {
+            switch (event.key) {
+                case 'ArrowUp':
+                    if (player.y - 50 >= 100) {
+                        player.y -= 50;
+                    }
+                    break;
+                case 'ArrowDown':
+                    if (player.y + 50 <= canvas.height - 100) {
+                        player.y += 50;
+                    }
+                    break;
+                case 'ArrowLeft':
+                    if (player.x - 50 >= 100) {
+                        player.x -= 50;
+                    }
+                    break;
+                case 'ArrowRight':
+                    if (player.x + 50 <= canvas.width - 100) {
+                        player.x += 50;
+                    }
+                    break;
+            }
+        })
+
+        function drawPlayer() {
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2, false);
+            ctx.fillStyle = player.color;
+            ctx.fill();
+        }
+
+        function drawEnemies() {
+            enemies.forEach(enemy => {
+                ctx.beginPath();
+                ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2, false);
+                ctx.fillStyle = enemy.color;
+                ctx.fill();
+            });
+        }
+
+        function spawnEnemies(){
+            let radius = 40 ;
+            let x = Math.random() * (canvas.width - radius * 2) + radius;
+            let speed = 2 ;
+
+            enemies.push({
+                x : x,
+                y : -radius,
+                speed : speed,
+                color : 'yellow',
+                radius : radius
+                
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPlayer();
+            drawEnemies();
+            enemies.forEach(enemy => {
+                enemy.y += enemy.speed
+                if(enemy.y  > canvas.height - 100 ){
+                    enemies.splice(enemies.indexOf(enemy));
+                }
+            })
+
+            requestAnimationFrame(animate);
+        }
+        setInterval(spawnEnemies,5000)
+
+
+        animate();
+
+    </script>
+</body>
+
+</html>

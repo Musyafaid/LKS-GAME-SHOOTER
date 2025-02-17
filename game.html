@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvasGame"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvasGame');
+        const ctx = canvas.getContext('2d');
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+
+        canvas.setAttribute('tabindex','0');
+        canvas.focus();
+
+        const player = {
+            x : canvas.width / 2,
+            y : canvas.height - 100,
+            radius : 30,
+            color : 'blue'
+        }
+
+        
+        const bullet = [];
+        const enemies = [];
+        let score = 0;
+
+
+        window.addEventListener('keydown',(event) => {
+            
+            if(event.key === 'ArrowUp'){
+                console.log ("arrow up");
+                
+            }
+
+            switch (event.key){
+                case 'ArrowUp' :
+                    player.y -= 10;
+                    break;
+                case 'ArrowDown' :
+                    player.y += 10;
+                    break;
+                case 'ArrowLeft' :
+                    player.x -= 10;
+                    break;
+                case 'ArrowRight' :
+                    player.x += 10;
+                    break;
+            }
+          
+        })
+
+        function drawPlayer (){
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.radius, 0 , Math.PI * 2, false);
+            ctx.fillStyle = player.color ;
+            ctx.fill();
+            
+        }
+
+        function animate(){
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPlayer();
+            requestAnimationFrame(animate);
+            
+        }
+
+        animate();
+    </script>
+</body>
+</html>
